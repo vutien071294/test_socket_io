@@ -1,0 +1,126 @@
+<html>
+<head>
+<title> Demo </title>
+<script src="jquery.js"></script>
+<script src="socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="trangchu.css">
+<link rel="stylesheet" href="chat.css">
+
+<script>
+	var socket = io("http://localhost:3000/");
+	socket.on("Server-send-data-chat", function(data){
+		var user_name_chat = data.chat_user_name;
+		var user_content_chat = data.chat_data;
+		$("#chatbox").append('<div class="content_all" id="chat_content"> <p><b>'+user_name_chat+': </b>' +user_content_chat+ '</div> ')
+	})
+</script>
+<script>
+	$(document).ready(function(){
+		var chat_name = '';
+		$("#enter_name").click(function(){
+			chat_name = $("#name_chat").val();
+			if (chat_name != '') {
+				$('#chat-page').removeAttr('hidden');
+				$("#loginform").attr("hidden","true");
+			}
+		})
+		$("#submitmsg").click(function(){
+			var chat_data = $("#usermsg").val();
+			var data = {};
+			data['chat_user_name'] = chat_name;
+			data['chat_data'] = chat_data;
+			if (chat_data != '') {
+				socket.emit("Client-send-data", data);
+				$("#chatbox").append('<div  class="content_all my_chat_content"><span id="my_chat_content">'+chat_data +'</span></div>')
+				document.getElementById('usermsg').value = "";
+			}
+		});
+	});
+</script>
+</head>
+<body>
+
+	<div id="wrapper">
+	<div id="loginform">
+	        <p>Điền thông tin để chat</p>
+	        <label for="name">Name:</label>
+	        <input type="text" name="name" id="name_chat" />
+	        <div> <button type="button" name="enter" id="enter_name" />Enter</button></div>
+
+    </div>
+	<div id="chat-page" hidden="" >
+	  	<div id="menu">
+	        <p class="welcome">Welcome to  chat page <b></b></p>
+	        <div style="clear:both"></div>
+	    </div>
+	    <div id="chatbox"></div>
+	        <input name="usermsg" type="text" id="usermsg" size="63" placeholder="Chat in here" />
+	        <button name="submitmsg" type="button"  id="submitmsg" />Send</button>
+	    </div>
+	</div>
+
+
+
+<div class="container">
+	<div class="row">
+    	<div class="panel panel-chat">
+	        <div class="panel-heading " >
+	            <a href="#" class="chatMinimize" onclick="return false"><span>Hỗ trợ online</span></a>
+	            <a href="#" class="chatClose" onclick="return false"><i class="glyphicon glyphicon-remove"></i></a>
+	            <div class="clearFix"></div>
+	        </div>
+	        <div class="confirm_info">
+	        	<div class="chat_form_div"><p>Nhập thông tin để chat</p></div>
+	        	<div class="chat_form_div">
+	        		<label for="name">Họ tên:</label>
+		        	<input type="text" name="name" id="name_chat" />
+	        	</div>
+	        	<div class="chat_form_div">
+	        		<label for="name">Email:</label>
+		        	<input type="text" name="name" id="name_chat" />
+	        	</div>
+	        	<div class="chat_form_div">
+	        		<label for="name">Số điện thoại:</label>
+		        	<input type="text" name="name" id="name_chat" />
+	        	</div>
+		        <div> <button type="button" name="enter" id="enter_name" />Enter</button></div>
+	        </div>
+	       
+	        <div class="panel-body" >
+	            <div class="messageMe">
+	            	<span class="name_user">Tien</span>
+	                <span class="content_chat_me"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae nihil sed excepturi velit unde aut veniam dolores pariatur harum, magnam laboriosam magni repellat quis. Doloribus nesciunt omnis qui error sit? </span>
+	                <div class="clearFix"></div>
+	            </div>
+	            <div class="messageHer">
+	            	<p class="name_user_admin">Admin</p>
+	                <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid corporis maxime vitae! Nulla dolore ullam fuga, maxime aliquid earum nisi odio ratione, est aperiam repellendus aut voluptatibus repellat consequuntur </span>
+	                <div class="clearFix"></div>
+	            </div>
+	            <div class="messageMe">
+	            	<span class="name_user">Tien</span>
+	                <span class="content_chat_me"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum recusandae deserunt, corporis laboriosam aliquid vitae quas perferendis sequi cumque? Ad odit placeat, excepturi explicabo deleniti accusamus atque, nulla dolorum libero.</span>
+	                <div class="clearFix"></div>
+	            </div>
+	            <div class="messageHer">
+	            	<p class="name_user_admin">Admin</p>
+	                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eius quisquam perspiciatis voluptas alias magnam quam exercitationem, odio accusantium voluptatibus officiis quos veniam cumque dolorum laboriosam. Odio enim amet, distinctio.</span>
+	                <div class="clearFix"></div>
+	            </div>
+	            <div class="messageMe">
+	            	<span class="name_user">Tien</span>
+	                <span class="content_chat_me">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias necessitatibus quisquam commodi, eum fugit soluta nisi, iure ipsa perferendis perspiciatis assumenda distinctio labore, at aliquid quasi sint voluptates quibusdam voluptas.</span>
+	                <div class="clearFix"></div>
+	            </div>
+	            <div class="clearFix"></div>
+	        </div>
+	        <div class="panel-footer">
+	            <textarea style="resize:none" name="textMessage" cols="0" rows="0" placeholder="Chat in here"></textarea>
+	        </div>
+    	</div>
+	</div>
+</div>
+<script src="chat.js"></script>
+</body>
+
+</html>
